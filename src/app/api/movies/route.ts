@@ -1,7 +1,7 @@
 import { findPackageJSON } from "module";
 import { NextResponse,NextRequest as Request } from "next/server";
 import Movie from "../model/movie_model";
-import { connect } from "../route";
+import { connect } from "../../lib/route";
 
 
 

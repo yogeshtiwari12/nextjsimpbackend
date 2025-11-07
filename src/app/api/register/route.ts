@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 import User from "../model/user";
 import { NextRequest as Request, NextResponse } from "next/server";
-import { connect } from "../route";
+import { connect } from "../../lib/route";
 
  connect();
 

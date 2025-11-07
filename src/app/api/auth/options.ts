@@ -1,8 +1,9 @@
 import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { connect } from "../../../lib/route";
-import User from "../../model/user";
+
+import User from "../model/user";
 import bcrypt from "bcryptjs";
+import { connect } from "../../lib/route";
 
 const resolvedSecret = process.env.NEXTAUTH_SECRET || 'dev-insecure-temp-secret-change-me';
 if (!process.env.NEXTAUTH_SECRET) {
