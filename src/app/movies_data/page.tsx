@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { common_url } from '../url/url';
 
 interface Movie {
   _id: string;
@@ -25,7 +24,7 @@ export default function MoviesPage() {
   useEffect(() => {
     async function fetchMovies() {
       try {
-        const response = await axios.get(`${common_url}/api/movies`);
+        const response = await axios.get(`/api/movies`);
         console.log('Raw API response:', response.data);
         setMovies(response.data.moviedata);
       } catch (err) {

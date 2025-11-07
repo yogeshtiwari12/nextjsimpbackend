@@ -4,7 +4,6 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { common_url } from '../url/url';
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -18,7 +17,7 @@ export default function RegisterPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`${common_url}/api/register`, formData);
+      const response = await axios.post(`/api/register`, formData);
       if (response.data.success) {
         console.log('Registration successful.', response.data);
         router.push('/login');
