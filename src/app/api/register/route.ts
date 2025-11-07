@@ -2,9 +2,10 @@ import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 import User from "../model/user";
 import { NextRequest as Request, NextResponse } from "next/server";
-import { connect } from "../../lib/route";
+import { connectDb } from "../../../lib/db";
 
- connect();
+
+  await connectDb();
 
 export async function POST(request : Request) {
     const reqbody = await request.json();
