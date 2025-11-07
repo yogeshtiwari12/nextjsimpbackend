@@ -5,7 +5,7 @@ import User from "../model/user";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 import { connect } from "../route";
-import { authOptions } from "../../lib/auth";
+import { authOptions } from "../auth/[...nextauth]/options";
 
 connect();
 

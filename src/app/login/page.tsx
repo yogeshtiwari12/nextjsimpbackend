@@ -8,30 +8,48 @@ import Link from 'next/link';
 export default function LoginPage() {
   const router = useRouter();
   const [formData, setFormData] = useState({
-    email: '',
-    password: ''
+    email: 'yt78@gmail.com',
+    password: '12345678'
   });
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
+    setLoading(true);
+
+    if (!formData.email || !formData.password) {
+      setError('Email and password are required');
+      setLoading(false);
+      return;
+    }
+
     try {
       const result = await signIn('credentials', {
         email: formData.email,
         password: formData.password,
         redirect: false,
-        callbackUrl: '/movies_data'
+        callbackUrl: '/movies_data',
       });
 
-      if (result?.error) {
-        setError(result.error);
-      } else if (result?.ok) {
-        router.push('/movies_data');
-        router.refresh();
+      console.log('Auth result:', result); // Debug log
+
+      if (!result?.ok) {
+        throw new Error(result?.error || 'Authentication failed');
       }
-    } catch (err) {
-      setError('Authentication failed');
+
+      // Wait for the session to be updated
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      router.push('/movies_data');
+      router.refresh();
+
+    } catch (err: any) {
       console.error('Login error:', err);
+      setError(err.message || 'Failed to login. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -59,8 +77,12 @@ export default function LoginPage() {
               onChange={(e) => setFormData({...formData, password: e.target.value})}
             />
           </div>
-          <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">
-            Login
+          <button 
+            type="submit" 
+            className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 disabled:bg-blue-300"
+            disabled={loading}
+          >
+            {loading ? 'Logging in...' : 'Login'}
           </button>
         </form>
         <p className="mt-4 text-center">

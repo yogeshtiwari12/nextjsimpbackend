@@ -1,8 +1,13 @@
 import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { connect } from "../api/route";
-import User from "../api/model/user";
+import { connect } from "../../route";
+import User from "../../model/user";
 import bcrypt from "bcryptjs";
+
+const resolvedSecret = process.env.NEXTAUTH_SECRET || 'dev-insecure-temp-secret-change-me';
+if (!process.env.NEXTAUTH_SECRET) {
+  console.warn('[NextAuth] NEXTAUTH_SECRET is missing. Using insecure development fallback. Add NEXTAUTH_SECRET to .env.local.');
+}
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -39,6 +44,11 @@ export const authOptions: NextAuthOptions = {
   },
   session: {
     strategy: "jwt",
+    maxAge: 24 * 60 * 60,
   },
-  debug: process.env.NODE_ENV === "development",
+  jwt: {
+    maxAge: 24 * 60 * 60,
+  },
+  // debug: process.env.NODE_ENV === "development",
+  secret: resolvedSecret,
 };
