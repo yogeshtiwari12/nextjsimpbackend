@@ -1,12 +1,12 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
-import User from "../model/route";
-import { NextRequest, NextResponse } from "next/server";
+import User from "../model/user";
+import { NextRequest as Request, NextResponse } from "next/server";
 import { connect } from "../route";
 
-connect();
+ connect();
 
-export async function POST(request) {
+export async function POST(request : Request) {
     const reqbody = await request.json();
   const { name, email, password, role } = reqbody;
   try {
@@ -16,6 +16,7 @@ export async function POST(request) {
     }
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
+    
     const newUser = new User({
       name,
       email,
@@ -28,6 +29,6 @@ export async function POST(request) {
 
   } catch (error) {
     console.error(error);
-    return NextResponse.status(500).json({ message: "Server Error" });
+    return NextResponse.json({ message: "Server Error" });
   }
 }

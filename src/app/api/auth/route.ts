@@ -1,24 +1,22 @@
 import jwt from "jsonwebtoken";
-import mongoose from "mongoose";
-import User from "../model/route"; 
-import { NextRequest ,NextResponse} from "next/server";
+import User from "../model/user"; 
+import { NextRequest as Request ,NextResponse} from "next/server";
 
 
 const secret = "iffhkjjfhgklkjbhvnl";
-const verifytoken = async(request) => {
+
+const verifytoken = async(request:Request) => {
     try {
       const token = request.cookies.get("token").value;
-
     if (!token) {
 
       return NextResponse.json({ error: "No token found" }, { status: 403 });
       
     }
-    const decoded = jwt.verify(token, secret);
+    const decoded = jwt.verify(token, secret) as { id : string };
  
-    const user = await User.findById({ _id: decoded.id });
+    const user = await User.findById({ _id: decoded.id }).select("-password -role");
 
-    // console.log("User:", user);
     return user;
 
   } catch (error) {
