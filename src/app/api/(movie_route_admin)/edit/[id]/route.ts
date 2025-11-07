@@ -5,20 +5,30 @@ import { connect } from "../../../route";
 
 
 connect()
-export async function POST(request: Request, { params }: { params: { id: string } }) {
 
-  const {id} = params;
- const data = await request.json();
- console.log(id, data);
+export async function POST(request: Request, context: any) {
+  try {
+    const { id } = (context?.params || {}) as { id: string };
+    if (!id) {
+      return NextResponse.json({ message: "Missing id param" }, { status: 400 });
+    }
 
-  const updateData = await Movie.findByIdAndUpdate(id, data, { new: true });
+    const data = await request.json();
 
-  if (!updateData) {
-    return NextResponse.json({ message: "Movie not found" }, { status: 404 });
+    const updateData = await Movie.findByIdAndUpdate(id, data, { new: true });
+
+    if (!updateData) {
+      return NextResponse.json({ message: "Movie not found" }, { status: 404 });
+    }
+
+    return NextResponse.json(
+      { message: "Movie updated successfully", moviedata: updateData },
+      { status: 200 }
+    );
+  } catch (err: any) {
+    return NextResponse.json(
+      { message: err?.message || "Internal Server Error" },
+      { status: 500 }
+    );
   }
-
-  return NextResponse.json(
-    { message: "Movie updated successfully" },
-    { status: 200 }
-  );
 }
