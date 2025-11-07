@@ -1,8 +1,9 @@
 import { NextResponse, NextRequest as Request } from "next/server";
 import Movie from "../../model/movie_model";
-import { connect } from "../../../lib/route";
+import { connectDb } from "../../../../lib/db";
 
-await connect();
+
+await connectDb();
 
 export async function POST(request: Request) {
   const data = await request.json();

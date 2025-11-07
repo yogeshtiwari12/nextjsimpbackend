@@ -4,10 +4,11 @@ import User from "../model/user";
 
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
-import { connect } from "../../lib/route";
-import { authOptions } from "../auth/[...nextauth]/options";
 
-connect();
+import { authOptions } from "../auth/[...nextauth]/options";
+import { connectDb } from "../../../lib/db";
+
+await connectDb();
 
 export async function GET(request: Request) {
   const session = await getServerSession(authOptions);

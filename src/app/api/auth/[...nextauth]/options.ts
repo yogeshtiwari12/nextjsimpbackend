@@ -1,8 +1,9 @@
 import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { connect } from "../../../lib/route";
+
 import User from "../../model/user";
 import bcrypt from "bcryptjs";
+import { connectDb } from "../../../../lib/db";
 
 const resolvedSecret = process.env.NEXTAUTH_SECRET || 'dev-insecure-temp-secret-change-me';
 if (!process.env.NEXTAUTH_SECRET) {
@@ -18,7 +19,7 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        await connect();
+        await connectDb();
 
         if (!credentials?.email || !credentials?.password) {
           throw new Error("Missing credentials");
