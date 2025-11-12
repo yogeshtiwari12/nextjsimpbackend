@@ -1,61 +1,67 @@
-"use client";
+"use client"
 
-import Link from "next/link";
-import { useSession, signOut } from "next-auth/react";
-
+import { useState } from "react"
+import ContentForm from "../components/ContentForm"
+import PostResults from "../components/PostResults"
+import { CardDescription } from "../../@/components/ui/card"
+import { Card } from "../../@/components/ui/card"
 export default function Home() {
-  const { data: session, status } = useSession();
+  const [results, setResults] = useState<any>(null)
+  const [loading, setLoading] = useState(false)
+
+  const handleGenerate = async (formData: {
+    link: string
+    projectType: string
+    todayFeature: string
+  }) => {
+    setLoading(true)
+    try {
+      const response = await fetch("/api/generate-posts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      })
+      const data = await response.json()
+      setResults(data)
+    } catch (error) {
+      console.error("Error generating posts:", error)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
-    <div className="min-h-screen p-8 font-[family-name:var(--font-geist-sans)]">
-      <main className="max-w-4xl mx-auto">
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold">Movie Database App</h1>
-          <div className="flex gap-4">
-            {status === 'authenticated' && session?.user ? (
-              <>
-                <span className="py-2">Welcome, {session.user.name}</span>
-                <button
-                  onClick={() => signOut({ callbackUrl: '/' })}
-                  className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
-                >
-                  Logout
-                </button>
-              </>
+    <main className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-12">
+        {/* Header */}
+        <div className="mb-12 text-center">
+          <h1 className="text-5xl font-bold text-foreground mb-4">Content Generator</h1>
+          <p className="text-xl text-muted-foreground">
+            Transform your project into engaging social media posts for LinkedIn, Twitter, and Instagram
+          </p>
+        </div>
+
+        {/* Main Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Input Section */}
+          <div className="lg:col-span-1">
+            <ContentForm onGenerate={handleGenerate} loading={loading} />
+          </div>
+
+          {/* Results Section */}
+          <div className="lg:col-span-2">
+            {results ? (
+              <PostResults data={results} />
             ) : (
-              <>
-                <Link
-                  href="/login"
-                  className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-                >
-                  Login
-                </Link>
-                <Link
-                  href="/register"
-                  className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
-                >
-                  Register
-                </Link>
-              </>
+              <CardDescription className="p-12 text-center">
+                <div className="text-muted-foreground">
+                  <p className="text-lg">Fill in your project details and click "Generate" to see your posts</p>
+                </div>
+              </Card>
             )}
           </div>
         </div>
-
-        <nav className="flex gap-4 mb-8">
-          <Link
-            href="/movies_data"
-            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
-          >
-            Movies List
-          </Link>
-          <Link
-            href="/api/movies"
-            className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors"
-          >
-            API Endpoint
-          </Link>
-        </nav>
-      </main>
-    </div>
-  );
+      </div>
+    </main>
+  )
 }
