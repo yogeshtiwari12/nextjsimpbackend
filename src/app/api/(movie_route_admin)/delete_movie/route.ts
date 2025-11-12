@@ -1,12 +1,8 @@
 import { NextResponse , NextRequest as Request } from "next/server";
 import Movie from "../../model/movie_model";
 import { connectDb } from "../../../../lib/db";
-
-
-
-
-await connectDb()
 export async function DELETE(request: Request) {
+    await connectDb();
     const data = await request.json();
     const id = data.id;
 

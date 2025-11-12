@@ -2,10 +2,8 @@ import { NextResponse, NextRequest as Request } from "next/server";
 import Movie from "../../../model/movie_model";
 import { connectDb } from "../../../../../lib/db";
 
-
-await connectDb()
-
 export async function POST(request: Request, context: any) {
+  await connectDb();
   try {
     const { id } = (context?.params || {}) as { id: string };
     if (!id) {

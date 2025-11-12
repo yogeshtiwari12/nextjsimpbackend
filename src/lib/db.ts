@@ -6,7 +6,6 @@ if (!MONGODB_URI) {
   throw new Error("MONGODB_URI is not set in environment variables");
 }
 
-// Use global cache to prevent multiple connections in dev
 let cached = (global as any)._mongooseCached as {
   conn: typeof mongoose | null;
   promise: Promise<typeof mongoose> | null;
@@ -21,7 +20,6 @@ export async function connectDb() {
 
   if (!cached.promise) {
     cached.promise = mongoose.connect(MONGODB_URI, {
-      // ...you can pass mongoose options here if needed...
     } as any);
   }
 

@@ -4,10 +4,8 @@ import User from "../model/user";
 import { NextRequest as Request, NextResponse } from "next/server";
 import { connectDb } from "../../../lib/db";
 
-
-  await connectDb();
-
 export async function POST(request : Request) {
+  await connectDb();
     const reqbody = await request.json();
   const { name, email, password, role } = reqbody;
   try {
