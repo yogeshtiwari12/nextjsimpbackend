@@ -92,7 +92,8 @@ Ensure each platform has 2-3 unique posts with different angles.
         
     } catch (error: any) {
         return Response.json({ 
-            error: "Failed to generate posts", 
+            error: error || "Failed to generate posts", 
+
             status: 503 
         });
     }
