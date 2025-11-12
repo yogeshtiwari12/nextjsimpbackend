@@ -43,7 +43,7 @@ COMPLETED PROJECT FOCUS:
 - Launch excitement`}
 
 PLATFORM SPECIFICS:
-Twitter: 300-350 chars, 2-3 specific hashtags, punchy hooks
+Twitter: 350-400 chars, 2-3 specific hashtags, punchy hooks
 LinkedIn: 300-350 chars, 3-5 professional hashtags, insights & questions
 Instagram: 300-350 chars, 4-7 engaging hashtags, emoji-friendly
 

@@ -10,7 +10,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
   useEffect(() => {
     // Force a router refresh to ensure session is synced
     router.refresh();
-  }, []);
+  }, [router]);
 
   return <SessionProvider refetchInterval={0}>{children}</SessionProvider>;
 }
